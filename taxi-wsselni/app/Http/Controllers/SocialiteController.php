@@ -6,6 +6,9 @@ use Hash;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use App\Models\City;
+use App\Models\Driver;
+use Illuminate\Support\Facades\Validator;
 
 class SocialiteController extends Controller
 {
@@ -28,21 +31,75 @@ class SocialiteController extends Controller
                     'google_id' => $googleUser->id,
                     'photo' => $googleUser->avatar,
                     'password' => Hash::make('Hafid2002@'),
-                    'role' => 'Passenger',
                 ]);
 
                 if($userData){
-                    auth()->login($userData);
-                    return redirect()->route('homepage');
+                    return redirect()->route('auth.confirm',['user'=>$userData]);
                 }
             }else{
                 auth()->login($user);
-                return redirect()->route('homepage');
+                if($user->role == 'Passenger'){
+                    return redirect()->route('homepage');
+                }else{
+                    return redirect()->route('driver.dashboard');
+                }
             }
         }catch(\Exception $e){
             dd($e->getMessage());
         }
-        
-        // dd($googleUser);
+    }
+
+    public function showConfirm(){
+        $cities = City::orderBy('name','asc')->get();
+        return view('auth.confirm',compact('cities'));
+    }
+
+    public function confirm(Request $request){
+        if($request->role == 'Driver'){
+            $validator = Validator::make($request->all(), [
+                'permis' => 'required|string|max:20',
+                'vehicule' => 'required|string|max:255',
+                'city' => 'required|integer|exists:cities,id',
+                'id' => 'required|integer|exists:users,id',
+                'phone' => 'required|string|max:15',
+                'role' => 'required|string|in:Driver,Passenger',
+            ]);
+        }else{
+            $validator = Validator::make($request->all(), [
+                'id' => 'required|integer|exists:users,id',
+                'phone' => 'required|string|max:15',
+                'role' => 'required|string|in:Driver,Passenger',
+            ]);
+        }
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user = User::find($request->id);
+        $user->phone = $request->phone;
+        $user->role = $request->role;
+        $user->save();
+
+
+
+        if($request->role == 'Driver'){
+            $driver = Driver::create([
+                'permis'   => $request->permis,
+                'vehicule' => $request->vehicule,
+                'id_driver'  => $user->id,
+                'id_city'  => $request->city,
+            ]);
+        }
+
+        auth()->login($user);
+
+        if($request->role == 'Passenger'){
+            return redirect()->route('homepage');
+        }else{
+            return redirect()->route('driver.dashboard');
+        }
     }
 }

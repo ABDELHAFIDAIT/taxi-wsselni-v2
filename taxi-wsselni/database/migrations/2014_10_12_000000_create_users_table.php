@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('google_id')->nullable();
             $table->enum('status',['Active','Suspended'])->default('Active');
-            $table->enum('role',['Driver','Passenger','Admin']);
+            $table->enum('role',['Driver','Passenger','Admin'])->default('Passenger');
             $table->rememberToken();
             $table->timestamps();
         });

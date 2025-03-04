@@ -104,7 +104,7 @@
                 <!-- Social Login -->
                 <div class="grid grid-cols-2 gap-4">
                     <a href="{{ route('auth.google') }}"><button type="button"
-                        class="w-full flex items-center justify-center py-2.5 border border-gray-300 rounded-lg shadow-sm bg-white hover:bg-gray-50">
+                        class="cursor-pointer w-full flex items-center justify-center py-2.5 border border-gray-300 rounded-lg shadow-sm bg-white hover:bg-gray-50">
                         <i class="fab fa-google text-red-500 mr-2"></i>
                         Google
                     </button></a>

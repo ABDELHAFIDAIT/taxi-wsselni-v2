@@ -67,4 +67,6 @@ Route::middleware(['auth'])->group(function(){
 Route::controller(SocialiteController::class)->group(function(){
     Route::get('auth/google','googleLogin')->name('auth.google');
     Route::get('auth/google-callback','googleAuthentication')->name('auth.google-callback');
+    Route::get('auth/confirm', 'showConfirm')->name('auth.confirm');
+    Route::post('auth/confirm', 'confirm')->name('auth.confirm');
 });
