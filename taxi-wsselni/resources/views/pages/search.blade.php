@@ -83,35 +83,35 @@
         <!-- Drivers Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Driver Card -->
-            @if(is_object($users) || is_array($users))
-                @foreach ($users as $user)
-                    @if($user->role == 'Driver')
+            @if(count($drivers) > 0)
+                @foreach ($drivers as $driver)
+                    @if($driver->user->role == 'Driver')
                         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                             <div class="p-6">
                                 <div class="flex items-center">
-                                    <img src="{{ asset('storage/' . $user->photo) }}" alt="Driver" class="w-20 h-20 rounded-full border-4 border-blue-100">
+                                    <img src="{{ asset('storage/' . $driver->user->photo) }}" alt="Driver" class="w-20 h-20 rounded-full border-4 border-blue-100">
                                     <div class="ml-4">
-                                        <h3 class="text-xl font-semibold text-gray-900">{{ $user->f_name . ' ' . $user->l_name }}</h3>
-                                        <p class="text-sm text-gray-500">Membre depuis {{ \Carbon\Carbon::parse($user->created_at)->translatedFormat('F Y') }}</p>
+                                        <h3 class="text-xl font-semibold text-gray-900">{{ $driver->user->f_name . ' ' . $driver->user->l_name }}</h3>
+                                        <p class="text-sm text-gray-500">Membre depuis {{ \Carbon\Carbon::parse($driver->user->created_at)->translatedFormat('F Y') }}</p>
                                     </div>
                                 </div>
                                 <div class="mt-4 space-y-2">
                                     <div class="flex items-center text-gray-600">
                                         <i class="fas fa-phone mr-2 text-blue-600"></i>
-                                        <span>{{ $user->phone}}</span>
+                                        <span>{{ $driver->user->phone}}</span>
                                     </div>
                                     <div class="flex items-center text-gray-600">
                                         <i class="fa-solid fa-taxi text-yellow-400 pr-3"></i>
-                                        <span>{{ $user->driver->vehicule }}</span>
+                                        <span>{{ $driver->vehicule }}</span>
                                     </div>
                                     <div class="flex items-center text-gray-600">
                                         <i class="fa-solid fa-city textt-gray-800 pr-3"></i>
-                                        <span>{{ $user->driver->city->name }}</span>
+                                        <span>{{ $driver->city->name }}</span>
                                     </div>
                                 </div>
                                 @auth
                                     @if(Auth::user()->role == 'Passenger')
-                                        <button data-id="{{ $user->driver->id_driver }}" data-city="{{ $user->driver->id_city }}"  id="openPopup" type="button" class="mt-4 px-8 py-2 bg-blue-600 text-white font-medium rounded-sm hover:bg-blue-700 transition-colors duration-200 flex justify-center items-center w-full cursor-pointer">
+                                        <button data-id="{{ $driver->id_driver }}" data-city="{{ $driver->id_city }}"  id="openPopup" type="button" class="mt-4 px-8 py-2 bg-blue-600 text-white font-medium rounded-sm hover:bg-blue-700 transition-colors duration-200 flex justify-center items-center w-full cursor-pointer">
                                             Réserver
                                         </button>
                                     @endif

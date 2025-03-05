@@ -9,6 +9,7 @@ use App\Models\DriverDisponibility;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SocialiteController;
+use App\Http\Controllers\DriverController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +67,8 @@ Route::post('/logout',[AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function(){
     Route::get('/passenger/profile',function(){ return view('passenger.profile'); })->name('passenger.profile');
     Route::get('/passenger/reservations',[ReservationController::class,'show'])->name('passenger.reservations');
-    Route::get('/driver/profile',function(){ return view('driver.profile'); })->name('driver.profile');
+    Route::get('/driver/profile',[DriverController::class,'show'])->name('driver.profile');
+    Route::post('/driver/edit',[DriverController::class,'edit'])->name('driver.edit');
     Route::get('/driver/dashboard',function(){ return view('driver.dashboard'); })->name('driver.dashboard');
     Route::get('/driver/trajets',[ReservationController::class, 'trajets'])->name('driver.trajets');
     Route::get('/driver/reservations',[ReservationController::class, 'index'])->name('driver.reservations');
@@ -76,6 +78,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/reservation/{id}/accept', [ReservationController::class, 'accept'])->name('reservation.accept');
     Route::get('/reservation/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservation.cancel');
     Route::get('/driver/disponibility', [DisponibilityController::class, 'show'])->name('driver.disponibility');
+    Route::get('/drivers/search', [DriverController::class, 'search'])->name('drivers.search');
     
     Route::get('/disponibilites', function () {
 
