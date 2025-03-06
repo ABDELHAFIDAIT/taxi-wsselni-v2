@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Taxi Wsselni</title>
+    <title>Taxi Wsselni 2</title>
     <link rel="icon" type="image/png" href="{{ asset('taxi.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,10 +18,21 @@
 
         .dropdown-menu {
             display: none;
+            cursor: pointer;
         }
 
         .dropdown:hover .dropdown-menu {
             display: block;
+            cursor: pointer;
+        }
+
+        *::-webkit-scrollbar {
+            width: 2px;
+            background-color: hsla(0, 2%, 81%, 0);
+        }
+        
+        *::-webkit-scrollbar-thumb{
+            background-color: hsla(221, 83%, 53%, 0);
         }
     </style>
     @yield('style')
@@ -97,7 +108,11 @@
                             <div class="dropdown relative">
                                 <button class="flex items-center space-x-3 focus:outline-none">
                                     <div class="flex items-center space-x-3">
-                                        <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Photo de profil" class="w-10 h-10 rounded-full border-2 border-blue-600">
+                                        @if(str_contains(Auth::user()->photo, 'https'))
+                                            <img src="{{ Auth::user()->photo }}" alt="Photo de profil" class="w-10 h-10 rounded-full border-2 border-blue-600">
+                                        @else
+                                            <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Photo de profil" class="w-10 h-10 rounded-full border-2 border-blue-600">
+                                        @endif
                                         <i class="fas fa-chevron-down text-gray-500 text-sm"></i>
                                     </div>
                                 </button>
@@ -174,7 +189,11 @@
                         <div class="dropdown relative">
                             <button class="flex items-center space-x-3 focus:outline-none">
                                 <div class="flex items-center space-x-3">
-                                    <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Photo de profil" class="w-10 h-10 rounded-full border-2 border-blue-600">
+                                    @if(str_contains(Auth::user()->photo, 'https'))
+                                        <img src="{{ Auth::user()->photo }}" alt="Photo de profil" class="w-10 h-10 rounded-full border-2 border-blue-600">
+                                    @else
+                                        <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Photo de profil" class="w-10 h-10 rounded-full border-2 border-blue-600">
+                                    @endif
                                     <i class="fas fa-chevron-down text-gray-500 text-sm"></i>
                                 </div>
                             </button>
@@ -200,7 +219,7 @@
                 <section class="flex">
                     <!-- Sidebar -->
                     <div class="hidden md:flex md:flex-shrink-0">
-                        <div class="flex flex-col w-64">
+                        <div class="flex flex-col w-64 h-[88vh]">
                             <div class="flex flex-col h-0 flex-1 bg-white shadow">
                                 <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                                     <nav class="flex-1 px-2 space-y-2">

@@ -13,12 +13,17 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('city_depart');
+            $table->unsignedInteger('city_arrivee');
+            $table->foreign('city_depart')->references('id')->on('cities');
+            $table->foreign('city_arrivee')->references('id')->on('cities');
             $table->unsignedInteger('id_passenger');
             $table->foreign('id_passenger')->references('id')->on('users');
             $table->unsignedInteger('id_driver');
-            $table->foreign('id_driver')->references('id')->on('drivers');
+            $table->foreign('id_driver')->references('id')->on('users');
             $table->timestamp('date_reservation');
-            $table->enum('status', ['pending', 'accepted', 'refused']);
+            $table->enum('status', ['pending', 'accepted', 'refused'])->default('pending');
+            $table->boolean('isPayed')->default(false);
             $table->timestamps();
         });
     }

@@ -23,4 +23,8 @@ class Driver extends Model
     public function city(){
         return $this->belongsTo(City::class, 'id_city');
     }
+
+    public function reservations(){
+        return $this->hasMany(Reservation::class, 'id_driver');
+    }
 }

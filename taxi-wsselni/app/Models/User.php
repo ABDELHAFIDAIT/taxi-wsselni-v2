@@ -53,4 +53,13 @@ class User extends Authenticatable
     public function driver(){
         return $this->hasOne(Driver::class,'id_driver');
     }
+
+    public function reservationsPassenger(){
+        return $this->hasMany(Reservation::class, 'id_passenger');
+    }
+
+
+    public function reservationsDriver(){
+        return $this->hasMany(Reservation::class, 'id_driver');
+    }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('driver_disponibility', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('id_driver');
-            $table->foreign('id_driver')->references('id')->on('drivers');
+            $table->foreign('id_driver')->references('id')->on('users');
             $table->unsignedInteger('id_disponibility');
             $table->foreign('id_disponibility')->references('id')->on('disponibility');
             $table->timestamps();

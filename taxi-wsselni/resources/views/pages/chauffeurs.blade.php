@@ -54,12 +54,9 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Ville</label>
                             <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">Sélectionnez une ville</option>
-                                <option value="casablanca">Casablanca</option>
-                                <option value="rabat">Rabat</option>
-                                <option value="marrakech">Marrakech</option>
-                                <option value="fes">Fès</option>
-                                <option value="tanger">Tanger</option>
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -90,13 +87,18 @@
         <!-- Drivers Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Driver Card -->
-            @if(is_object($users))
+            @if(is_object($users) || is_array($users))
                 @foreach ($users as $user)
                     @if($user->role == 'Driver')
                         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                             <div class="p-6">
                                 <div class="flex items-center">
-                                    <img src="{{ asset('storage/' . $user->photo) }}" alt="Driver" class="w-20 h-20 rounded-full border-4 border-blue-100">
+                                    @if(str_contains($user->photo, 'https'))
+                                        <img src="{{ $user->photo }}" alt="Driver" class="w-20 h-20 rounded-full border-4 border-blue-100">
+                                    @else
+                                        <img src="{{ asset('storage/' . $user->photo) }}" alt="Driver" class="w-20 h-20 rounded-full border-4 border-blue-100">
+                                    @endif
+                                    {{-- <img src="{{ asset('storage/' . $user->photo) }}" alt="Driver" class="w-20 h-20 rounded-full border-4 border-blue-100"> --}}
                                     <div class="ml-4">
                                         <h3 class="text-xl font-semibold text-gray-900">{{ $user->f_name . ' ' . $user->l_name }}</h3>
                                         <p class="text-sm text-gray-500">Membre depuis {{ \Carbon\Carbon::parse($user->created_at)->translatedFormat('F Y') }}</p>
@@ -118,7 +120,7 @@
                                 </div>
                                 @auth
                                     @if(Auth::user()->role == 'Passenger')
-                                        <button data-id="{{ $user->driver->id }}" id="openPopup" type="button" class="mt-4 px-8 py-2 bg-blue-600 text-white font-medium rounded-sm hover:bg-blue-700 transition-colors duration-200 flex justify-center items-center w-full cursor-pointer">
+                                        <button data-id="{{ $user->driver->id_driver }}" data-city="{{ $user->driver->id_city }}"  id="openPopup" type="button" class="mt-4 px-8 py-2 bg-blue-600 text-white font-medium rounded-sm hover:bg-blue-700 transition-colors duration-200 flex justify-center items-center w-full cursor-pointer">
                                             Réserver
                                         </button>
                                     @endif
@@ -132,6 +134,18 @@
             @endif
         </div>
 
+        @error('city_arrivee')
+            <div class="mt-8 border border-red-400 bg-red-200 text-red-800 rounded-md">
+                <h1 class="py-2 px-5">{{ $message }}</h1>
+            </div>
+        @enderror
+
+        @error('date_reservation')
+            <div class="mt-8 border border-red-400 bg-red-200 text-red-800 rounded-md">
+                <h1 class="py-2 px-5">{{ $message }}</h1>
+            </div>
+        @enderror
+
         <!-- Popup -->
         <div id="popup" class="fixed inset-0 z-50 flex items-center justify-center hidden">
             <div class="bg-white rounded-md w-1/3">
@@ -140,33 +154,24 @@
                     <i id="closePopup" class="fa-solid fa-xmark cursor-pointer text-xl"></i>
                 </div>
                 <div class="h-[0.2px] bg-gray-200"></div>
-                <form id="reservationForm" class="space-y-4 p-5 ">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Ville de départ</label>
-                        <select name="ville_depart" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="Casablanca">Casablanca</option>
-                            <option value="Rabat">Rabat</option>
-                            <option value="Marrakech">Marrakech</option>
-                            <option value="Fès">Fès</option>
-                            <option value="Tanger">Tanger</option>
-                        </select>
-                    </div>
+                <form method="POST" action="{{ route('reservation.create') }}" id="reservationForm" class="space-y-4 p-5">
+                    @csrf
+                    <input type="hidden" name="id_driver" id="id_driver">
+                    <input type="hidden" id="id_city" name="city_depart">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Ville d'arrivée</label>
-                        <select name="ville_arrivee" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="Casablanca">Casablanca</option>
-                            <option value="Rabat">Rabat</option>
-                            <option value="Marrakech">Marrakech</option>
-                            <option value="Fès">Fès</option>
-                            <option value="Tanger">Tanger</option>
+                        <select name="city_arrivee" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @foreach ($cities as $city)
+                                <option value="{{ $city->id }}">{{ $city->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Date et heure de départ</label>
-                        <input type="datetime-local" name="departureDateTime" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="datetime-local" name="date_reservation" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="mt-6">
-                        <button type="button" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer">
+                        <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer">
                             Confirmer
                         </button>
                     </div>
@@ -184,6 +189,8 @@
         openPopups.forEach(openPopup => {
             openPopup.addEventListener('click', () => {
                 document.getElementById('popup').classList.remove('hidden');
+                document.getElementById('id_driver').value = openPopup.dataset.id;
+                document.getElementById('id_city').value = openPopup.dataset.city;
             });
         });
 

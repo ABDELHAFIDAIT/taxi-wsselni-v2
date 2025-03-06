@@ -41,7 +41,11 @@
                 <div class="profile-card bg-white rounded-2xl shadow-lg p-6">
                     <div class="text-center">
                         <div class="relative inline-block">
-                            <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Profile" class="mx-auto w-32 h-32 rounded-full border-4 border-blue-500 shadow-lg">
+                            @if (str_contains(Auth::user()->photo, 'http'))
+                                <img src="{{ Auth::user()->photo }}" alt="Profile" class="mx-auto w-32 h-32 rounded-full border-4 border-blue-500 shadow-lg">
+                            @else
+                                <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Profile" class="mx-auto w-32 h-32 rounded-full border-4 border-blue-500 shadow-lg">
+                            @endif
                             <button class="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-200">
                                 <i class="fas fa-camera"></i>
                             </button>

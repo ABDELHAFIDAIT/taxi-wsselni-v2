@@ -103,7 +103,7 @@ class AuthController extends Controller
 
         auth()->login($user);
 
-        if($user->role = 'Passenger'){
+        if($user->role == 'Passenger'){
             return redirect()->route('homepage');
         }else{
             return redirect()->route('driver.dashboard');
