@@ -2,12 +2,24 @@
 
 namespace App\Mail;
 
+// use BaconQrCode\Encoder\QrCode;
+use Endroid\QrCode\QrCode;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+
+
+use App\Models\User;
+// use Illuminate\Bus\Queueable;
+// use Illuminate\Contracts\Queue\ShouldQueue;
+// use Illuminate\Mail\Mailable;
+// use Illuminate\Queue\SerializesModels;
+// use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+use Illuminate\Support\Facades\Storage;
 
 class RefuseReservationMail extends Mailable
 {
@@ -34,33 +46,74 @@ class RefuseReservationMail extends Mailable
         $this->car = $car;
     }
 
+
+
+
+
+    public function build()
+    {
+        $qrData = "Passenger : {$this->passenger}\n
+                Date de Réservation : {$this->date}\n
+                Ville de Départ : {$this->depart}\n
+                Ville de Destination : {$this->destination}\n
+                Chauffeur : {$this->driver}\n
+                Véhicule : {$this->car}";
+
+        $qrCode = new QrCode($qrData);
+
+        $writer = new PngWriter();
+
+        $qrFilePath = storage_path('app/public/qrcodes/user_' . $this->passenger . '_qr.png');
+
+        $directory = storage_path('app/public/qrcodes');
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        $qrImageData = $writer->write($qrCode);
+        file_put_contents($qrFilePath, $qrImageData->getString());
+
+        return $this->subject('Status de Votre Réservation sur TAXI WSSELNI - QR Code')
+                    ->view('mails.refuse') 
+                    ->attach($qrFilePath, [
+                    'as' => 'reservation_info_qr.png',
+                    'mime' => 'image/png',
+        ]);
+    }
+
+
+
+
+
+
+
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Status de Votre Réservation sur TAXI WSSELNI',
-        );
-    }
+    // public function envelope(): Envelope
+    // {
+    //     return new Envelope(
+    //         subject: 'Status de Votre Réservation sur TAXI WSSELNI',
+    //     );
+    // }
 
     /**
      * Get the message content definition.
      */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'mails.refuse',
-        );
-    }
+    // public function content(): Content
+    // {
+    //     return new Content(
+    //         view: 'mails.refuse',
+    //     );
+    // }
 
     /**
      * Get the attachments for the message.
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
-    public function attachments(): array
-    {
-        return [];
-    }
+    // public function attachments(): array
+    // {
+    //     return [];
+    // }
 }
