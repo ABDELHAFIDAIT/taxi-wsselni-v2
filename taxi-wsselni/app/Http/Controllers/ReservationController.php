@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AcceptReservationMail;
+use App\Mail\RefuseReservationMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class ReservationController extends Controller
 {
@@ -46,6 +49,20 @@ class ReservationController extends Controller
         }
         $reservation->status = 'accepted';
         $reservation->save();
+
+        $userName = $reservation->passenger->f_name. ' ' . $reservation->passenger->l_name;
+        $email = "abdelhafid320902@gmail.com";
+        $date = $reservation->date_reservation;
+        $depart = $reservation->cityDepart->name;
+        $destination = $reservation->cityArrivee->name;
+        $driver = $reservation->driver->f_name. ' ' . $reservation->driver->l_name;
+        $car = $reservation->driver->driver->vehicule;
+
+        
+        Mail::to($email)-> send(new AcceptReservationMail($userName, $date, $depart, $destination, $driver, $car));
+        
+        
+        
         return redirect()->back();
     }
 
@@ -56,6 +73,17 @@ class ReservationController extends Controller
         }
         $reservation->status = 'refused';
         $reservation->save();
+
+        $userName = $reservation->passenger->f_name. ' ' . $reservation->passenger->l_name;
+        $email = "abdelhafid320902@gmail.com";
+        $date = $reservation->date_reservation;
+        $depart = $reservation->cityDepart->name;
+        $destination = $reservation->cityArrivee->name;
+        $driver = $reservation->driver->f_name. ' ' . $reservation->driver->l_name;
+        $car = $reservation->driver->driver->vehicule;
+
+        Mail::to($email)-> send(new RefuseReservationMail($userName, $date, $depart, $destination, $driver, $car));
+
         return redirect()->back();
     }
 
