@@ -9,14 +9,14 @@ if(Auth::user()->role!='Admin'){
 
 @section('dashboard')
     <!-- Passengers Table -->
-    @if($passengers)
+    {{-- @if(count($passengers) > 0) --}}
         <div class="px-5 py-5 w-[calc(100%-16rem)]">
             <div class="p-6">
-                @if (session('success'))
-                    <div class="my-8 border border-green-300 bg-green-200 text-green-800 text-sm rounded-sm">
-                        <h1 class="py-2 px-5">{{ session('success') }}</h1>
+                {{-- @error('date_reservation')
+                    <div class="my-8 border border-red-300 bg-red-200 text-red-800 text-sm rounded-sm">
+                        <h1 class="py-2 px-5">{{ $message }}</h1>
                     </div>
-                @endif
+                @enderror --}}
                 <h2 class="text-lg font-semibold text-gray-900 mb-4">Les Passagers Inscris</h2>
                 <div class="overflow-x-auto h-[65vh] overflow-y-auto">
                     <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
@@ -101,17 +101,17 @@ if(Auth::user()->role!='Admin'){
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900">
                                             <i class="far fa-calendar-alt text-blue-500 mr-2"></i>
-                                            {{explode(' ',$passenger->created_at)[0]}}
+                                            {{ $passenger->created_at }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                         @if ($passenger->status == 'Active')
-                                            <a href="/passenger/{{ $passenger->id }}/suspend"><button class="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200">
+                                            <a href="/passenger/{{ $passenger->id }}/activate"><button class="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200">
                                                 <i class="fas fa-times mr-1"></i>
                                                 Suspendre
                                             </button></a>
                                         @else
-                                            <a href="/passenger/{{ $passenger->id }}/activate"><button class="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200">
+                                            <a href="/passenger/{{ $passenger->id }}/suspend"><button class="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200">
                                                 <i class="fas fa-check mr-1"></i>
                                                 Activer
                                             </button></a>
@@ -124,9 +124,9 @@ if(Auth::user()->role!='Admin'){
                 </div>
             </div>
         </div>
-    @else
+    {{-- @else
         <div class="p-10">
-            <h1 class="text-red-600 text-2xl font-semibold">Aucun Passager inscris pour le Moment !</h1>
+            <h1 class="text-red-600 text-2xl font-semibold">Aucune Réservation pour le Moment !</h1>
         </div>
-    @endif
+    @endif --}}
 @endsection

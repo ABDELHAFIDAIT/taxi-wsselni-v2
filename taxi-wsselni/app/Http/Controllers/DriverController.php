@@ -4,12 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Driver;
 use App\Models\City;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class DriverController extends Controller
 {
+    public function index(){
+        $users = User::with('driver','driver.city')->withCount('reservationsDriver')->get();
+        return view('admin.drivers', compact('users'));
+    }
+
+
+
+
     public function show(){
         $driver = Driver::with(['city', 'user'])->where('id_driver', Auth::id())->first();
         $cities = City::orderBy('name', 'asc')->get();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\ReservationController;
@@ -117,6 +118,16 @@ Route::middleware(['auth'])->group(function(){
 
     Route::post('/reaction/create',[ReactionController::class,'store'])->name('reaction.create');
     Route::get('/driver/reactions',[ReactionController::class,'index'])->name('driver.reactions');
+
+
+    Route::get('/admin/dashboard', function(){ return view('admin.dashboard'); })->name('admin.dashboard');
+    Route::get('/admin/passengers', [UserController::class,'passengers'])->name('admin.passengers');
+    Route::get('/admin/drivers', [DriverController::class,'index'])->name('admin.drivers');
+    Route::get('/admin/reactions', function(){ return view('admin.comments'); })->name('admin.reactions');
+    Route::get('/admin/profile', function(){ return view('admin.profile'); })->name('admin.profile');
+
+    Route::get('/passenger/{id}/activate',[UserController::class,'activate'])->name('passenger.activate');
+    Route::get('/passenger/{id}/suspend',[UserController::class,'suspend'])->name('passenger.suspend');
 });
 
 

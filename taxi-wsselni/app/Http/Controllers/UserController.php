@@ -25,4 +25,25 @@ class UserController extends Controller
         $passenger->save();
         return redirect()->back()->with('success', 'Profile est mis à jour avec succès');
     }
+
+    public function passengers(){
+        $passengers = User::withCount('reservationsPassenger')
+                    ->where('role','Passenger')
+                    ->get();
+        return view('admin.users',compact('passengers'));
+    }
+
+    public function suspend($id){
+        $user = User::findOrFail($id);
+        $user->status = "Suspended";
+        $user->save();
+        return redirect()->back()->with('success', 'Statut est mise à jour avec succès !');
+    }
+
+    public function activate($id){
+        $user = User::findOrFail($id);
+        $user->status = "Active";
+        $user->save();
+        return redirect()->back()->with('success', 'Statut est mise à jour avec succès !');
+    }
 }

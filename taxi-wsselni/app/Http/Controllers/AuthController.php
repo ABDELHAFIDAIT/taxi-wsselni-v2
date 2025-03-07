@@ -37,7 +37,7 @@ class AuthController extends Controller
             }else if(auth()->user()->role == 'Driver' && auth()->user()->status == 'Active'){
                 return redirect()->intended('/driver/dashboard');
             }else if(auth()->user()->role == 'Admin' && auth()->user()->status == 'Active'){
-                return redirect()->intended('/driver/dashboard');
+                return redirect()->intended('/admin/dashboard');
             }else if(auth()->user()->status == 'Suspended'){
                 return redirect()->back()->withErrors('Status','Vous êtes Suspendu pour le Moment !');
             }
@@ -112,7 +112,7 @@ class AuthController extends Controller
         }else if(auth()->user()->role == 'Driver' && auth()->user()->status == 'Active'){
             return redirect()->intended('/driver/dashboard');
         }else if(auth()->user()->role == 'Admin' && auth()->user()->status == 'Active'){
-            return redirect()->intended('/driver/dashboard');
+            return redirect()->intended('/admin/dashboard');
         }else if(auth()->user()->status == 'Suspended'){
             return redirect()->back()->withErrors('Status','Vous êtes Suspendu pour le Moment !');
         }
