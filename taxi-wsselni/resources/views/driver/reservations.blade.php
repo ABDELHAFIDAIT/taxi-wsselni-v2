@@ -3,7 +3,7 @@
 @section('dashboard')
     <!-- Reservations Table -->
     @if(count($reservations) > 0)
-        <div class="px-5 py-10 w-[calc(100%-16rem)]">
+        <div class="px-5 py-5 w-[calc(100%-16rem)]">
             <div class="p-6">
                 @error('date_reservation')
                     <div class="my-8 border border-red-300 bg-red-200 text-red-800 text-sm rounded-sm">
@@ -11,7 +11,7 @@
                     </div>
                 @enderror
                 <h2 class="text-lg font-semibold text-gray-900 mb-4">Mes Réservations</h2>
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto h-[65vh] overflow-y-auto">
                     <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
                         <thead class="bg-gray-50">
                             <tr>

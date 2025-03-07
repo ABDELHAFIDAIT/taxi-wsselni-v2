@@ -102,6 +102,9 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/calender', function () {
         return view('driver.calender');
     });
+
+    Route::post('/passenger/edit', [UserController::class, 'editPassenger'])->name('passenger.edit');
+    Route::post('/passenger/password/edit', [AuthController::class, 'updatePassword'])->name('passenger.password');
 });
 
 
