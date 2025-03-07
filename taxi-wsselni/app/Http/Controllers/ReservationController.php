@@ -91,4 +91,15 @@ class ReservationController extends Controller
         $trajets = Reservation::with('driver','cityDepart','cityArrivee')->where('date_reservation','<',Carbon::now())->where('status','accepted')->where('id_driver','=', Auth::user()->id)->orderBy('created_at','desc')->get();
         return view('driver.trajets', compact('trajets'));
     }
+
+    public function show(){
+        $reservations = Reservation::with('driver','driver.driver','cityDepart','cityArrivee')->where('id_passenger','=', Auth::user()->id)->orderBy('id','desc')->get();
+        return view('passenger.reservations', compact('reservations'));
+    }
+
+    public function destroy($id){
+        $reservation = Reservation::findOrFail($id);
+        $reservation->delete();
+        return redirect()->back()->withErrors('success', 'Réservation supprimée avec succès !');
+    }
 }

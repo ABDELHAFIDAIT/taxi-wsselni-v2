@@ -57,11 +57,11 @@
                         <nav class="space-y-3">
                             <a href="#" class="nav-link flex items-center px-4 py-3 text-blue-600 bg-blue-50 rounded-xl">
                                 <i class="fas fa-user-circle text-xl mr-3"></i>
-                                <span class="font-medium">Informations personnelles</span>
+                                <span class="font-medium">Profile</span>
                             </a>
-                            <a href="#" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors duration-200">
+                            <a href="{{ route('passenger.reservations') }}" class="nav-link flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors duration-200">
                                 <i class="fas fa-history text-xl mr-3"></i>
-                                <span class="font-medium">Historique des trajets</span>
+                                <span class="font-medium">Mes Réservations</span>
                             </a>
                             <form method="POST" action="{{ route('logout') }}" class="cursor-pointer nav-link flex items-center px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-colors duration-200">
                                 @csrf
