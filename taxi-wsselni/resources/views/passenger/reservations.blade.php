@@ -33,6 +33,9 @@
         background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
         transform: translateY(-2px);
     }
+    #popup{
+        background-color: rgba(0, 0, 0, 0.8);
+    }
 </style>
 @endsection
 
@@ -142,23 +145,78 @@
                                 </div>
                             </div>
                             <h1 class="text-lg font-bold text-gray-800 mt-5">{{ $reservation->price }} MAD</h1>
-                            @if(!$reservation->isPayed)
+                            
                             <div class="flex justify-end items-center gap-5 mt-5">
-                                @if ($reservation->status == 'accepted')
-                                    <a href="/payment/{{ $reservation->id }}"><button class="cursor-pointer bg-blue-600 text-xs text-white py-1 px-3 rounded-sm">Payer<i class="fa-solid fa-credit-card ml-2"></i></button></a>
+
+                                @if(!$reservation->isPayed)
+                                    @if ($reservation->status == 'accepted')
+                                        <a href="/payment/{{ $reservation->id }}"><button class="cursor-pointer bg-blue-600 text-xs text-white py-1 px-3 rounded-sm">Payer<i class="fa-solid fa-credit-card ml-2"></i></button></a>
+                                    @endif
+                                    
+                                    <form method="POST" action="/reservation/{{ $reservation->id }}/delete">
+                                        @csrf
+                                        <button class="cursor-pointer bg-red-500 text-xs text-white py-1 px-3 rounded-sm">Supprimer<i class="fa-solid fa-trash ml-2"></i></button>
+                                    </form>
                                 @endif
-                                
-                                <form method="POST" action="/reservation/{{ $reservation->id }}/delete">
-                                    @csrf
-                                    <button class="cursor-pointer bg-red-500 text-xs text-white py-1 px-3 rounded-sm">Supprimer<i class="fa-solid fa-trash ml-2"></i></button>
-                                </form>
-                                
+                                <button id="openPopup" data-driver="{{ $reservation->id_driver }}" type="button" class="cursor-pointer bg-purple-500 text-xs text-white py-1 px-3 rounded-sm">Réagir <i class="fa-solid fa-comment ml-2"></i></button>
                             </div>
-                            @endif
                         </div>
                     @endforeach
                 </div>
             </div>
         </div>
     </div>
+
+
+    <!-- Popup -->
+    <div id="popup" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-md w-1/3">
+            <div class="flex items-center justify-between p-5">
+                <h1 class="text-2xl font-semibold">Réserver ce Taxi</h1>
+                <i id="closePopup" class="fa-solid fa-xmark cursor-pointer text-xl"></i>
+            </div>
+            <div class="h-[0.2px] bg-gray-200"></div>
+            <form method="POST" action="{{ route('reaction.create') }}" id="reactionForm" class="space-y-4 p-5">
+                @csrf
+                <input type="hidden" name="id_driver" id="id_driver">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Evaluation /5</label>
+                    <select name="rating" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Commentaire</label>
+                    <textarea type="text" name="comment" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+                <div class="mt-6">
+                    <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer">
+                        Ajouter
+                    </button>
+                </div>
+            </form>
+        </div> 
+    </div>
+@endsection
+
+@section('script')
+    <script>
+        const closePopup = document.getElementById('closePopup');
+        const openPopups = document.querySelectorAll('#openPopup');
+
+        openPopups.forEach(openPopup => {
+            openPopup.addEventListener('click', () => {
+                document.getElementById('popup').classList.remove('hidden');
+                document.getElementById('id_driver').value = openPopup.dataset.driver;
+            });
+        });
+
+        closePopup.addEventListener('click', () => {
+            document.getElementById('popup').classList.add('hidden');
+        });
+    </script>
 @endsection

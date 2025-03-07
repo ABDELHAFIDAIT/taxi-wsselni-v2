@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -111,6 +112,11 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/passenger/edit', [UserController::class, 'editPassenger'])->name('passenger.edit');
     Route::post('/passenger/password/edit', [AuthController::class, 'updatePassword'])->name('passenger.password');
     Route::post('/reservation/{id}/delete', [ReservationController::class, 'destroy'])->name('reservation.delete');
+
+
+
+    Route::post('/reaction/create',[ReactionController::class,'store'])->name('reaction.create');
+    Route::get('/driver/reactions',[ReactionController::class,'index'])->name('driver.reactions');
 });
 
 

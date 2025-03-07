@@ -62,4 +62,12 @@ class User extends Authenticatable
     public function reservationsDriver(){
         return $this->hasMany(Reservation::class, 'id_driver');
     }
+
+    public function DriverReactions(){
+        return $this->hasMany(Reaction::class,'id_driver');
+    }
+    
+    public function PassengerReactions(){
+        return $this->hasMany(Reaction::class,'id_passenger');
+    }
 }

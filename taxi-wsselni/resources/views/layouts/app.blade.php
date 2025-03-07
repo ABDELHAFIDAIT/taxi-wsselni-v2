@@ -173,9 +173,7 @@
                     </div>
                 </div>
             </nav>
-        @endif
-
-        @if(Auth::user()->role === 'Driver')
+        @else
             <!-- Navigation -->
             <nav class="bg-white shadow-lg">
                 <div class="max-w-7xl mx-auto px-4">
@@ -210,6 +208,8 @@
                 </div>
             </nav>
         @endif
+
+        
     @endauth
 
 
@@ -239,6 +239,10 @@
                                             <i class="fa-regular fa-calendar mr-3"></i>
                                             Disponibilité
                                         </a>
+                                        <a href="{{ route('driver.reactions') }}" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md">
+                                            <i class="fa-solid fa-comment mr-3"></i>
+                                            Réactions
+                                        </a>
                                         <a href="{{ route('driver.profile') }}" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md">
                                             <i class="fa-solid fa-user mr-3"></i>
                                             Profile
@@ -253,6 +257,44 @@
                     @yield('dashboard')
                 </section>
             @endif
+            {{-- @if(Auth::user()->role === 'Admin')
+                <section class="flex">
+                    <!-- Sidebar -->
+                    <div class="hidden md:flex md:flex-shrink-0">
+                        <div class="flex flex-col w-64 h-[88vh]">
+                            <div class="flex flex-col h-0 flex-1 bg-white shadow">
+                                <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+                                    <nav class="flex-1 px-2 space-y-2">
+                                        <a href="{{ route('admin.dashboard') }}" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md">
+                                            <i class="fas fa-tachometer-alt mr-3"></i>
+                                            Tableau de bord
+                                        </a>
+                                        <a href="{{ route('admin.reservations') }}" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md">
+                                            <i class="fa-regular fa-bookmark mr-3"></i>
+                                            Réservations
+                                        </a>
+                                        <a href="{{ route('admin.trajets') }}" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md">
+                                            <i class="fas fa-route mr-3"></i>
+                                            Historique des Trajets
+                                        </a>
+                                        <a href="{{ route('admin.disponibility') }}" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md">
+                                            <i class="fa-regular fa-calendar mr-3"></i>
+                                            Disponibilité
+                                        </a>
+                                        <a href="{{ route('admin.profile') }}" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md">
+                                            <i class="fa-solid fa-user mr-3"></i>
+                                            Profile
+                                        </a>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    @yield('dashboard')
+                </section>
+            @endif --}}
         @endauth
 
 
