@@ -108,13 +108,20 @@
                         @endif
                             <div class="flex justify-between items-center">
                                 <h1 class="font-medium">{{ $reservation->cityDepart->name }} → {{ $reservation->cityArrivee->name }}</h1>
-                                @if ($reservation->status == 'accepted')
-                                    <span class="text-xs px-2 bg-green-200 text-green-700 rounded-full py-1">Acceptée</span>
-                                @elseif ($reservation->status == 'refused')
-                                    <span class="text-xs px-2 bg-red-200 text-red-700 rounded-full py-1">Refusée</span>
-                                @else
-                                    <span class="text-xs px-2 bg-yellow-200 text-yellow-700 rounded-full py-1">En Attente</span>
-                                @endif
+                                <div class="flex flex-col gap-2 text-center">
+                                    @if ($reservation->status == 'accepted')
+                                        <span class="text-xs px-2 bg-green-200 text-green-700 rounded-full py-1">Acceptée</span>
+                                    @elseif ($reservation->status == 'refused')
+                                        <span class="text-xs px-2 bg-red-200 text-red-700 rounded-full py-1">Refusée</span>
+                                    @else
+                                        <span class="text-xs px-2 bg-yellow-200 text-yellow-700 rounded-full py-1">En Attente</span>
+                                    @endif
+                                    @if ($reservation->isPayed)
+                                        <span class="text-xs px-2 bg-green-200 text-green-700 rounded-full py-1">Payée</span>
+                                    @else
+                                        <span class="text-xs px-2 bg-red-200 text-red-700 rounded-full py-1">Non Payée</span>
+                                    @endif
+                                </div>
                             </div>
                             <div class="flex flex-col gap-1 mt-5 text-sm">
                                 <div class="flex gap-3 items-center">
@@ -134,14 +141,20 @@
                                     <p>{{ $reservation->driver->driver->vehicule }}</p>
                                 </div>
                             </div>
-                            <div class="flex justify-between items-center mt-5">
-                                <h1 class="text-lg font-bold text-gray-800 ">500 MAD</h1>
+                            <h1 class="text-lg font-bold text-gray-800 mt-5">{{ $reservation->price }} MAD</h1>
+                            @if(!$reservation->isPayed)
+                            <div class="flex justify-end items-center gap-5 mt-5">
+                                @if ($reservation->status == 'accepted')
+                                    <a href="/payment/{{ $reservation->id }}"><button class="cursor-pointer bg-blue-600 text-xs text-white py-1 px-3 rounded-sm">Payer<i class="fa-solid fa-credit-card ml-2"></i></button></a>
+                                @endif
+                                
                                 <form method="POST" action="/reservation/{{ $reservation->id }}/delete">
                                     @csrf
                                     <button class="cursor-pointer bg-red-500 text-xs text-white py-1 px-3 rounded-sm">Supprimer<i class="fa-solid fa-trash ml-2"></i></button>
                                 </form>
+                                
                             </div>
-                            
+                            @endif
                         </div>
                     @endforeach
                 </div>

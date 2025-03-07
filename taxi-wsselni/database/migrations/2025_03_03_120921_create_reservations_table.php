@@ -24,6 +24,7 @@ return new class extends Migration
             $table->timestamp('date_reservation');
             $table->enum('status', ['pending', 'accepted', 'refused'])->default('pending');
             $table->boolean('isPayed')->default(false);
+            $table->unsignedInteger('price');
             $table->timestamps();
         });
     }

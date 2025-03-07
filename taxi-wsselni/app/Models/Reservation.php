@@ -15,6 +15,7 @@ class Reservation extends Model
         'id_passenger',
         'id_driver',
         'date_reservation',
+        'price'
     ];
 
 
@@ -32,5 +33,9 @@ class Reservation extends Model
 
     public function cityArrivee(){
         return $this->belongsTo(City::class, 'city_arrivee');
+    }
+
+    public function payment(){
+        return $this->hasOne(Payment::class, 'id_reservation');
     }
 }

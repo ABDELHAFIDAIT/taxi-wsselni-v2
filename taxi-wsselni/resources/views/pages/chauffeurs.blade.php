@@ -165,6 +165,10 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Date et heure de départ</label>
                         <input type="datetime-local" name="date_reservation" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Prix Proposé</label>
+                        <input id="price" type="text" name="price" min="20" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
                     <div class="mt-6">
                         <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer">
                             Confirmer

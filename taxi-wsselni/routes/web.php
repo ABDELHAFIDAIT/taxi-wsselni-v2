@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,3 +125,7 @@ Route::controller(SocialiteController::class)->group(function(){
 
 
 
+// Payment (Stripe)
+// Route::get('/payment/{reservation_id}/{price}', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
+Route::get('/payment/{id}', [ReservationController::class,'get'])->name('show.payment');
+Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');

@@ -15,10 +15,11 @@ class ReservationController extends Controller
 {
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
-            'city_depart' => 'required|integer',
-            'city_arrivee' => 'required|integer|different:city_depart',
-            'id_driver' => 'required|integer',
+            'city_depart'      => 'required|integer',
+            'city_arrivee'     => 'required|integer|different:city_depart',
+            'id_driver'        => 'required|integer',
             'date_reservation' => 'required|date|after_or_equal:now',
+            'price'            => 'required|integer|min:20'
         ]);
 
         if ($validator->fails()) {
@@ -32,9 +33,12 @@ class ReservationController extends Controller
             'id_driver' => $request->id_driver,
             'id_passenger' => Auth::user()->id,
             'date_reservation' => $request->date_reservation,
+            'price' => (int)$request->price,
         ]);
+        
+        
 
-        return redirect()->route('chauffeurs');
+        return redirect()->route('passenger.reservations');
     }
 
     public function index(){
@@ -70,6 +74,8 @@ class ReservationController extends Controller
         $reservation = Reservation::find($id);
         if($reservation->date_reservation < now()->addHour()){
             return redirect()->back()->withErrors(['date_reservation' => 'Tu ne peux pas annuler cette réservation car il reste moins d\'une heure avant le départ !']);
+        }else if($reservation->isPayed){
+            return redirect()->back()->withErrors(['date_reservation' => 'Tu ne peux pas annuler cette réservation car il est déjà payé par le Passager !']);
         }
         $reservation->status = 'refused';
         $reservation->save();
@@ -101,5 +107,10 @@ class ReservationController extends Controller
         $reservation = Reservation::findOrFail($id);
         $reservation->delete();
         return redirect()->back()->withErrors('success', 'Réservation supprimée avec succès !');
+    }
+
+    public function get($id){
+        $reservation = Reservation::findOrFail($id);
+        return view('passenger.payment',compact('reservation'));
     }
 }

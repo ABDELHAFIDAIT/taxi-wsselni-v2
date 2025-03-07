@@ -29,6 +29,12 @@
         </a>
     </div>
 
+    <div class="mb-12">
+        @error('Status')
+            <p class="text-sm font-light py-1 px-5 bg-red-100 text-red-700 border border-red-600 rounded-sm">{{ $message }}</p>
+        @enderror
+    </div>
+
     <!-- Login Form -->
     <div class="w-full max-w-md">
         <div class="bg-white rounded-2xl shadow-xl p-8">

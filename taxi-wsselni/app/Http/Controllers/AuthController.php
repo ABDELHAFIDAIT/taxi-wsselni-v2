@@ -32,10 +32,14 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
 
-            if(auth()->user()->role == 'Passenger'){
+            if(auth()->user()->role == 'Passenger' && auth()->user()->status == 'Active'){
                 return redirect()->intended('/');
-            }else{
+            }else if(auth()->user()->role == 'Driver' && auth()->user()->status == 'Active'){
                 return redirect()->intended('/driver/dashboard');
+            }else if(auth()->user()->role == 'Admin' && auth()->user()->status == 'Active'){
+                return redirect()->intended('/driver/dashboard');
+            }else if(auth()->user()->status == 'Suspended'){
+                return redirect()->back()->withErrors('Status','Vous êtes Suspendu pour le Moment !');
             }
         }
 
@@ -103,10 +107,14 @@ class AuthController extends Controller
 
         auth()->login($user);
 
-        if($user->role == 'Passenger'){
-            return redirect()->route('homepage');
-        }else{
-            return redirect()->route('driver.dashboard');
+        if(auth()->user()->role == 'Passenger' && auth()->user()->status == 'Active'){
+            return redirect()->intended('/');
+        }else if(auth()->user()->role == 'Driver' && auth()->user()->status == 'Active'){
+            return redirect()->intended('/driver/dashboard');
+        }else if(auth()->user()->role == 'Admin' && auth()->user()->status == 'Active'){
+            return redirect()->intended('/driver/dashboard');
+        }else if(auth()->user()->status == 'Suspended'){
+            return redirect()->back()->withErrors('Status','Vous êtes Suspendu pour le Moment !');
         }
     }
 

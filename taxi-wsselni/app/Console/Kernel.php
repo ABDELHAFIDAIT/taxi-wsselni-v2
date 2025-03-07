@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('reservations:cancel-expired')->everySecond();
+        $schedule->command('reservations:update-payment')->everySecond();
     }
 
     /**
