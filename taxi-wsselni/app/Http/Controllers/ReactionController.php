@@ -12,13 +12,20 @@ class ReactionController extends Controller
     {
         $reactions = Reaction::with('Passenger')
                             ->where('id_driver',Auth::user()->id)
+                            ->where('status','accepted')
                             ->orderBy('created_at','desc')
                             ->get();
     
         return view('driver.reactions', compact( 'reactions'));
     }
 
-
+    public function reactions(){
+        $reactions = Reaction::with('Passenger')
+                        ->with('driver','passenger')
+                        ->orderBy('created_at','desc')
+                        ->get();
+        return view('admin.comments', compact( 'reactions'));
+    }
 
     public function store(Request $request)
     {
@@ -39,5 +46,19 @@ class ReactionController extends Controller
     }
 
 
+    public function accept($id){
+        $reaction = Reaction::findOrFail($id);
+        $reaction->status = "accepted";
+        $reaction->save();
+        return redirect()->back()->with('success', 'Statut est mise à jour avec succès !');
+    }
+
+
+    public function refuse($id){
+        $reaction = Reaction::findOrFail($id);
+        $reaction->status = "refused";
+        $reaction->save();
+        return redirect()->back()->with('success', 'Statut est mise à jour avec succès !');
+    }
 
 }

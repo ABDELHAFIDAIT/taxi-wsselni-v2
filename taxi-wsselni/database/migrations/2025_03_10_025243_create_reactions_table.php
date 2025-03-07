@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedInteger('id_passenger');
             $table->foreign('id_driver')->references('id')->on('users');
             $table->foreign('id_passenger')->references('id')->on('users');
+            $table->enum('status',['accepted','pending','refused'])->default('pending');
             $table->timestamps();
         });
     }

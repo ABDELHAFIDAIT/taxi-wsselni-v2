@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Validator;
 class DriverController extends Controller
 {
     public function index(){
-        $users = User::with('driver','driver.city')->withCount('reservationsDriver')->get();
-        return view('admin.drivers', compact('users'));
+        $drivers = User::with('driver','driver.city')->withCount('reservationsDriver')->where('role','Driver')->get();
+        return view('admin.drivers', compact('drivers'));
     }
 
 
@@ -27,8 +27,8 @@ class DriverController extends Controller
 
     public function edit(Request $request){
         $validator = Validator::make($request->all(), [
-            'permis' => 'required|string|min:6|max:20|unique:drivers',
-            'vehicule' => 'required|string|max:255',
+            'permis' => 'nullable|string|min:6|max:20|unique:drivers',
+            'vehicule' => 'nullable|string|max:255',
         ]);
 
         
@@ -40,6 +40,20 @@ class DriverController extends Controller
         }
 
         $driver = Driver::where('id_driver',Auth::user()->id)->first();
+
+        // if($request->has('permis')){
+        //     $driver->permis = $request->permis;
+        // }
+
+        // if($request->has('vehicule')){
+        //     $driver->vehicule = $request->vehicule;
+        // }
+
+        // if($request->has('city')){
+        //     $driver->id_city = $request->city;
+        // }
+
+        // $driver->save();
         
         $driver->update([
             'permis' => $request->permis,

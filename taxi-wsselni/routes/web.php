@@ -118,12 +118,14 @@ Route::middleware(['auth'])->group(function(){
 
     Route::post('/reaction/create',[ReactionController::class,'store'])->name('reaction.create');
     Route::get('/driver/reactions',[ReactionController::class,'index'])->name('driver.reactions');
+    Route::get('/reaction/{id}/accept',[ReactionController::class,'accept'])->name('reaction.accept');
+    Route::get('/reaction/{id}/refuse',[ReactionController::class,'refuse'])->name('reaction.refuse');
 
 
     Route::get('/admin/dashboard', function(){ return view('admin.dashboard'); })->name('admin.dashboard');
     Route::get('/admin/passengers', [UserController::class,'passengers'])->name('admin.passengers');
     Route::get('/admin/drivers', [DriverController::class,'index'])->name('admin.drivers');
-    Route::get('/admin/reactions', function(){ return view('admin.comments'); })->name('admin.reactions');
+    Route::get('/admin/reactions', [ReactionController::class,'reactions'])->name('admin.reactions');
     Route::get('/admin/profile', function(){ return view('admin.profile'); })->name('admin.profile');
 
     Route::get('/passenger/{id}/activate',[UserController::class,'activate'])->name('passenger.activate');
